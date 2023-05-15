@@ -1,0 +1,42 @@
+version: '3'
+
+services:
+  api:
+    container_name: todo-api
+    build: 
+      context: ./api
+      dockerfile: ./Dockerfile
+      target: develop
+    tty: true
+    restart: always
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_DB=todo-db
+      - POSTGRES_HOST=postgresql
+      - ENVIRONMENT=develop
+    depends_on:
+      - postgresql
+    ports:
+      - 8080:8080
+    volumes:
+      - ./api:/go/src/github.com/mahiro72/go_api-template
+  postgresql:
+    container_name: todo-postgresql
+    build:
+      context: .
+      dockerfile: ./db/postgresql/Dockerfile
+    tty: true
+    restart: always
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_DB=todo-db
+    ports:
+      - 5432:5432
+    volumes:
+      - todo-postgresql-vol:/var/lib/postgresql
+      - ./db/postgresql/initdb.d:/docker-entrypoint-initdb.d
+
+volumes:
+  todo-postgresql-vol:
