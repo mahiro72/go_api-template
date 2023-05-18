@@ -2,30 +2,28 @@ package usecase
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/mahiro72/go_api-template/pkg/domain/model"
 	"github.com/mahiro72/go_api-template/pkg/domain/repository"
+	"golang.org/x/xerrors"
 )
 
-type DeleteUser struct {
+type deleteUser struct {
 	repoUser repository.User
 }
 
-func NewDeleteUser(ru repository.User) *DeleteUser {
-	return &DeleteUser{
-		repoUser: ru,
-	}
+func NewDeleteUser(ru repository.User) *deleteUser {
+	return &deleteUser{repoUser: ru}
 }
 
-func (uc *DeleteUser) Exec(ctx context.Context, id string) error {
+func (uc *deleteUser) Exec(ctx context.Context, id string) error {
 	if !model.IsValidUserID(id) {
-		return fmt.Errorf("usecase.DeleteUser: user id is invalid")
+		return xerrors.Errorf("!model.IsValidUserID: userID is invalid")
 	}
 
 	err := uc.repoUser.Delete(ctx, id)
 	if err != nil {
-		return fmt.Errorf("usecase.DeleteUser: %w", err)
+		return xerrors.Errorf("uc.repoUser.Delete: %v", err)
 	}
 	return nil
 }

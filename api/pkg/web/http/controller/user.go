@@ -19,8 +19,8 @@ type userResponse struct {
 
 func newUserResponse(u *model.User) *userResponse {
 	return &userResponse{
-		ID:   u.GetID(),
-		Name: u.GetName(),
+		ID:   u.ID,
+		Name: u.Name,
 	}
 }
 

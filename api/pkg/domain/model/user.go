@@ -5,14 +5,14 @@ import (
 )
 
 type User struct {
-	id   string
-	name string
+	ID   string
+	Name string
 }
 
 func NewUser(id, name string) *User {
 	return &User{
-		id:   id,
-		name: name,
+		ID:   id,
+		Name: name,
 	}
 }
 
@@ -25,10 +25,16 @@ func IsValidUserID(id string) bool {
 	return err == nil
 }
 
-func (u *User) GetID() string {
-	return u.id
+type UserWithTodos struct {
+	ID    string
+	Name  string
+	Todos []*Todo
 }
 
-func (u *User) GetName() string {
-	return u.name
+func NewUserWithTodos(u *User, todos []*Todo) *UserWithTodos {
+	return &UserWithTodos{
+		ID:    u.ID,
+		Name:  u.Name,
+		Todos: todos,
+	}
 }

@@ -46,13 +46,15 @@ func InitRouter() {
 }
 
 func newHandlers(db *sql.DB) http.Handler {
-	router := chi.NewRouter()
+	r := chi.NewRouter()
+	// user controller
+	r.Get("/users/{userID}", controller.GetUser(db))
+	r.Post("/users", controller.CreateUser(db))
+	r.Put("/users/{userID}", controller.UpdateUser(db))
+	r.Delete("/users/{userID}", controller.DeleteUser(db))
 
-	router.Group(func(ur chi.Router) {
-		ur.Get("/users/{userID}", controller.GetUser(db))
-		ur.Post("/users", controller.CreateUser(db))
-		ur.Put("/users/{userID}", controller.UpdateUser(db))
-		ur.Delete("/users/{userID}", controller.DeleteUser(db))
-	})
-	return router
+	// todo controller
+	r.Get("/users/{userID}/todos", controller.GetAllTodoByUserID(db))
+	r.Get("/users/{userID}/todos/{todoID}", controller.GetTodoByUserID(db))
+	return r
 }
